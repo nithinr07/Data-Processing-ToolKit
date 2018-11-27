@@ -15,6 +15,8 @@ class Record {
             Record(const Record&);
             ~Record();
             void setRecord(std::string, int);
+            int getNumNumericVariables() { return _numNumericalVariables; }
+            std::vector<double> getFeatureVector() { return _featureVector; }
 };
 
 #endif // !RECORD_H_

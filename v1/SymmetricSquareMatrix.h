@@ -4,9 +4,9 @@
 #define SYMMETRIC_SQUARE_MATRIX_H_
 class SymmetricSquareMatrix : public Matrix {
     private: 
-    public: SymmetricSquareMatrix(int, int);
+    public: SymmetricSquareMatrix(int);
             SymmetricSquareMatrix(const SymmetricSquareMatrix&);
             ~SymmetricSquareMatrix();
 };
 
-#endif // !RECORD_H_
+#endif // !RECORD_H_#include "Matrix.h"
