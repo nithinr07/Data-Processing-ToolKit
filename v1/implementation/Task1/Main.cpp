@@ -1,6 +1,7 @@
-#include "../v1/SymmetricSquareMatrix.h"
-#include "../v1/Matrix.h"
-#include "../v1/Record.h"
+#include "../../SymmetricSquareMatrix.h"
+#include "../../Matrix.h"
+#include "../../Record.h"
+#include "WordDelimitedBy.h"
 
 #include <iostream>
 #include <fstream>
@@ -9,10 +10,6 @@
 #include <cmath>
 
 using namespace std;
-
-template<char delimiter>
-class WordDelimitedBy : public string
-{};
 
 template<char delimiter>
 istream& operator>>(istream& is, const WordDelimitedBy<delimiter>& output)
@@ -31,33 +28,6 @@ int get_col_size(string init) {
     istringstream iss(init);
     vector<string> tokens{istream_iterator<WordDelimitedBy<','>>{iss}, istream_iterator<WordDelimitedBy<','>>{}};
     return stoi(tokens.at(1)); 
-}
-
-double compute_pairwise_similarity(Record record1, Record record2) {
-    vector<double> A = record1.getFeatureVector();
-    vector<double> B = record2.getFeatureVector();
-    double dot = 0.0, denom_a = 0.0, denom_b = 0.0 ;
-         for(unsigned int i = 0u; i < record1.getNumNumericVariables(); ++i) {
-            dot += A[i] * B[i] ;
-            denom_a += A[i] * A[i] ;
-            denom_b += B[i] * B[i] ;
-        }
-    return dot / (sqrt(denom_a) * sqrt(denom_b)) ;    
-}
-
-void Record::setRecord(string data, int n) {
-    istringstream iss(data);
-    vector<string> tokens{istream_iterator<WordDelimitedBy<';'>>{iss}, istream_iterator<WordDelimitedBy<';'>>{}}; 
-    for(int i = 0;i < n;i++) {
-        _nonFeatureVector.push_back(tokens[i]);
-    }
-    for(int i = 0;i < _numNumericalVariables;i++) {
-        _featureVector.push_back(stod(tokens[i + n]));
-    }
-}
-
-void Matrix::addRecord(Record record) {
-    _data.push_back(record);
 }
 
 int main(int argc, char **argv) {

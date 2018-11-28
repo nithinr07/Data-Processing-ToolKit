@@ -9,4 +9,4 @@ class SymmetricSquareMatrix : public Matrix {
             ~SymmetricSquareMatrix();
 };
 
-#endif // !RECORD_H_#include "Matrix.h"
+#endif // !SYMMETRIC_SQUARE_MATRIX_H_
