@@ -10,4 +10,4 @@ class SymmetricSquareMatrix : public Matrix {
             double getElementOfMatrix(int,int);
 };
 
-#endif // !RECORD_H_#include "Matrix.h"
+#endif // !SYMMETRIC_SQUARE_MATRIX_H_
