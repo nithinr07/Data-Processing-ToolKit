@@ -35,7 +35,6 @@ vector<int> minDegReorder(SymmetricSquareMatrix &inputMatrix, vector<int> permut
         double sum = 0.0;
         for(int j = 0; j < rows; j++){
             if(i != j){
-                cout << "blah"<< i << "," << j << endl;
                 sum += inputMatrix.getElementOfMatrix(i,j);
             }
         }

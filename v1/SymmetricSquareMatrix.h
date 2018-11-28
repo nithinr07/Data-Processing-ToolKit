@@ -7,7 +7,7 @@ class SymmetricSquareMatrix : public Matrix {
     public: SymmetricSquareMatrix(int nodes): Matrix(nodes,nodes){}
             SymmetricSquareMatrix(const SymmetricSquareMatrix&);
             ~SymmetricSquareMatrix();
-            double getElementOfMatrix(int,int);
+            double getElementOfMatrix(int, int);
 };
 
 #endif // !SYMMETRIC_SQUARE_MATRIX_H_

@@ -3,6 +3,7 @@
 #include "../../Record.h"
 #include "Similarity.h"
 #include "WordDelimitedBy.h"
+#include "KMeans.h"
 
 #include <iostream>
 #include <fstream>
@@ -43,4 +44,20 @@ double Similarity::compute_pairwise_similarity() {
             denom_b += B[i] * B[i];
         }
     return dot / (sqrt(denom_a) * sqrt(denom_b));    
+}
+
+void KMeans::compute_centroids() {
+    int count = 0;
+    while(count != _K) {
+        int id = rand() % (_dataSet.getNumRows() + 1);
+        if(_centroids.count(id) == 0) {
+            std::vector<double> entry = _dataSet.getData(id).getFeatureVector();
+            _centroids[id] = entry;
+            count++;
+        }
+    }
+}
+
+void KMeans::process() {
+    
 }
