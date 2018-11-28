@@ -12,10 +12,11 @@ class Record {
              std::vector<double> _featureVector;
     public: Record(int y, int n, int N):_numVariables(y), _numNonNumericalVariables(n), _numNumericalVariables(N) {}
             Record(int, int, int, std::vector<std::string>, std::vector<double>);
-            Record(const Record&);
-            ~Record();
+            // Record(const Record&);
+            // ~Record();
             void setRecord(std::string, int);
             int getNumNumericVariables() { return _numNumericalVariables; }
+            void setFeatureVector(std::vector<double>);
             std::vector<double> getFeatureVector() { return _featureVector; }
 };
 

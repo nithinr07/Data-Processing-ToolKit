@@ -11,9 +11,12 @@ class Matrix {
              std::vector<Record> _data;
     public: Matrix(int M, int N):_numRows(M), _numCols(N) {} 
             Matrix(int, int, std::vector<Record>);
-            Matrix(const Matrix&);
-            ~Matrix();
+            // Matrix(const Matrix&);
+            // ~Matrix();
             void addRecord(Record);
+            Record getData(int i){ return _data[i]; }
+            int getNumRows() { return _numRows; }
+
 };
 
 #endif // !MATRIX_H_
