@@ -8,6 +8,7 @@
 #include <sstream>
 #include <iterator>
 #include <cmath>
+#include <bits/time.h>
 
 using namespace std;
 
@@ -31,6 +32,7 @@ int get_col_size(string init) {
 }
 
 int main(int argc, char **argv) {
+    srand(time(NULL));
     int n = stoi(argv[1]);
     ifstream inputFile;
     inputFile.open("../Lab-project-modified-datasets_20181114/AirQualityUCI/AirQualityUCI.csv");
