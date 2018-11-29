@@ -6,7 +6,7 @@
 #define MATRIX_H_
 
 class Matrix {
-    private: int _numRows;
+    private: int _numRows;  
              int _numCols;
              std::vector<Record> _data;
     public: Matrix(int M, int N):_numRows(M), _numCols(N) {} 
