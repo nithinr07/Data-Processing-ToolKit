@@ -4,6 +4,7 @@
 #include "Similarity.h"
 #include "WordDelimitedBy.h"
 #include "KMeans.h"
+#include "Cluster.h"
 
 #include <iostream>
 #include <fstream>
@@ -54,6 +55,10 @@ void KMeans::compute_centroids() {
             std::vector<double> entry = _dataSet.getData(id).getFeatureVector();
             _centroids[id] = entry;
             count++;
+            Cluster cluster;
+            cluster.set_id(count);
+            cluster.set_centralValues(entry);
+            add_cluster(cluster);
         }
     }
 }

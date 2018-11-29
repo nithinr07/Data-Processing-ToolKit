@@ -11,10 +11,11 @@ class KMeans {
     private: int _K;
              Matrix _dataSet;
              std::vector<Cluster> _clusters;
-             std::map<int, vector<double>> _centroids;
+             std::map<int, std::vector<double>> _centroids;
     public: KMeans(int, Matrix);
             void compute_centroids();
             void process();
+            void add_cluster(Cluster cluster) { _clusters.push_back(cluster); }
 };
 
 #endif // !K_MEANS_H_
