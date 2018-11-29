@@ -35,11 +35,9 @@ void Matrix::addRecord(Record record) {
     _data.push_back(record);
 }
 
-double Similarity::compute_pairwise_similarity() {
-    std::vector<double> A = _record1.getFeatureVector();
-    std::vector<double> B = _record2.getFeatureVector();
+double Similarity::compute_pairwise_similarity(std::vector<double> A, std::vector<double> B) {
     double dot = 0.0, denom_a = 0.0, denom_b = 0.0;
-        for(unsigned int i = 0u; i < _record1.getNumNumericVariables(); ++i) {
+        for(unsigned int i = 0u; i < A.size(); ++i) {
             dot += A[i] * B[i] ;
             denom_a += A[i] * A[i];
             denom_b += B[i] * B[i];
@@ -64,5 +62,13 @@ void KMeans::compute_centroids() {
 }
 
 void KMeans::process() {
-    
+    Similarity cosine_similarity;
+    for(int i = 0;i < _dataSet.getNumRows();i++) {
+        double dissimilarity = 0.0;
+        std::map<int, std::vector<double>> iterator it;
+        for(it = _centroids.begin(); it != _centroids.end(); it++) {
+            dissimilarity = 1 - cosine_similarity.compute_pairwise_similarity(_dataSet.getData(i).getFeatureVector(), it->second);
+        }
+        
+    }
 }
