@@ -22,7 +22,7 @@ std::istream& operator>>(std::istream& is, WordDelimitedBy<delimiter>& output)
 
 void Record::setRecord(std::string data, int n) {
     std::istringstream iss(data);
-    std::vector<std::string> tokens{std::istream_iterator<WordDelimitedBy<';'>>{iss}, std::istream_iterator<WordDelimitedBy<';'>>{}}; 
+    std::vector<std::string> tokens{std::istream_iterator<WordDelimitedBy<','>>{iss}, std::istream_iterator<WordDelimitedBy<','>>{}}; 
     for(int i = 0;i < n;i++) {
         _nonFeatureVector.push_back(tokens[i]);
     }
@@ -54,21 +54,67 @@ void KMeans::compute_centroids() {
             _centroids[id] = entry;
             count++;
             Cluster cluster;
-            cluster.set_id(count);
+            cluster.set_id(id);
             cluster.set_centralValues(entry);
             add_cluster(cluster);
         }
     }
 }
 
-void KMeans::process() {
+Cluster KMeans::get_cluster_by_id(int id) {
+    Cluster cluster;
+    for(int i = 0;i < _clusters.size();i++) {
+        if(_clusters[i].get_id() == id) 
+            cluster = _clusters[i];
+    }
+    return cluster;
+}
+
+void KMeans::update_centroid(int id, int clusterSize, std::vector<double> entry) {
+    std::map<int, std::vector<double>>::iterator it;
+    // std::vector<double>::iterator it1;
+    it = _centroids.find(id);
+    std::vector<double> currentCentroid = it -> second;
+    for(int i = 0;i < entry.size();i++) {
+        double sum = 0.0;
+        double average = 0.0;
+        sum = currentCentroid[i] * (clusterSize - 1) + entry[i];
+        average = sum / clusterSize;
+        currentCentroid[i] = average;
+        Cluster cluster = get_cluster_by_id(id);
+        cluster.update_centralValue(i, average);
+    }
+}
+
+void KMeans::process(int maxIterations) {
     Similarity cosine_similarity;
     for(int i = 0;i < _dataSet.getNumRows();i++) {
         double dissimilarity = 0.0;
-        std::map<int, std::vector<double>> iterator it;
+        int id = -1;
+        std::map<int, std::vector<double>>::iterator it;
         for(it = _centroids.begin(); it != _centroids.end(); it++) {
-            dissimilarity = 1 - cosine_similarity.compute_pairwise_similarity(_dataSet.getData(i).getFeatureVector(), it->second);
+            double value = 1.0 - cosine_similarity.compute_pairwise_similarity(_dataSet.getData(i).getFeatureVector(), it -> second);
+            if(dissimilarity > value) {
+                dissimilarity = value;
+                id = it -> first;
+            }
         }
-        
+        for(int j = 0;j < _clusters.size();j++) {
+            if(id == _clusters[j].get_id()) {
+                Vector data(_dataSet.getData(i));
+                _clusters[j].add_vector(data);
+                update_centroid(id, _clusters[j].get_size(), data.getFeatureVector());
+            }
+        }
+    }
+    for(int i = 0;i < maxIterations -1;i++) {
+        for(int i = 0;i < _dataSet.getNumRows();i++) {
+            std::map<int, std::vector<double>>::iterator it;
+            
+            for(it = _centroids.begin(); it != _centroids.end(); it++) {
+                double dissimilarity1 = cosine_similarity.compute_pairwise_similarity(_dataSet.getData(i).getFeatureVector(), it -> second);
+
+            }
+        }
     }
 }

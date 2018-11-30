@@ -10,10 +10,14 @@
 class Cluster {
     private: int _id;
              std::vector<double> _centralValues;
-             std::map<int, Vector> _vectors; 
+             std::vector<Vector> _vectors; 
     public: Cluster() {}
+            int get_id() { return _id; }
             void set_id(int id) { _id = id; }
+            int get_size() { return _vectors.size(); }
             void set_centralValues(std::vector<double> centralValues) { _centralValues = centralValues; }
+            void update_centralValue(int i, double value) { _centralValues[i] = value; }
+            void add_vector(Vector data) { _vectors.push_back(data); }
 };
 
 #endif // !CLUSTER_H_

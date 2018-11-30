@@ -5,7 +5,7 @@
 
 class Vector : public Record {
     private: int _clusterId;
-    public: Vector();
+    public: Vector(Record data):Record(data) {}
             void set_cluster_id(int);
 };
 

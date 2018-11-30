@@ -14,8 +14,10 @@ class KMeans {
              std::map<int, std::vector<double>> _centroids;
     public: KMeans(int, Matrix);
             void compute_centroids();
-            void process();
+            void process(int);
             void add_cluster(Cluster cluster) { _clusters.push_back(cluster); }
+            void update_centroid(int, int, std::vector<double>);
+            Cluster get_cluster_by_id(int);
 };
 
 #endif // !K_MEANS_H_
