@@ -2,9 +2,9 @@
 #include "../../Matrix.h"
 #include "../../Record.h"
 #include "Similarity.h"
-#include "../Task1/WordDelimitedBy.h"
+#include "WordDelimitedBy.h"
 #include "KMeans.h"
-#include "../Task2/DistanceMatrix.h"
+#include "Cluster.h"
 
 #include <iostream>
 #include <fstream>
@@ -13,62 +13,6 @@
 #include <cmath>
 #include <vector>
 
-// Implementation of Matrix Class
-
-Matrix::Matrix(int R , int C , std::vector<Record> _data ): _numRows(R), _numCols(C) {
-  _data = *(new std::vector<Record>)  ;
-  for (int i = 0 ; i < _numRows ; i++) {
-    _data[i] = *(new Record()) ;
-    }
-}
-
-Matrix::Matrix(): _numRows(0), _numCols(0) {
-  _data = *(new std::vector<Record>)  ;
-}
-
-Matrix::~Matrix() {
-    _data.clear();
-  _numRows = 0 ; _numCols = 0 ;
-}
-
-Matrix::Matrix(Matrix& m) :
-  _numRows(m._numRows), _numCols(m._numCols){
-  _data = *(new std::vector<Record>)  ;
-  for (int i = 0 ; i < _numRows ; i++) {
-    _data[i] = *(new Record()) ;
-    }
-    
-        
-  for (int i = 0; i < _numRows; i++) 
-      _data[i] = m._data[i];
-}
-
-void Matrix::addRecord(Record record) {
-    _data.push_back(record);
-}
-
-std::ostream& operator<< (std::ostream& os, Matrix& m)
- {
-
-  int nr = m._numRows ;
-  int nc = m._numCols ;
-  os << nr << " " << nc << std::endl;
-  for (int i = 0; i < nr; i++) {
-      os << m._data[i]<< " " ;
-  }
-  return os;
-}
-
-std::ostream& operator<< (std::ostream &os, Record &r)
-{
-    for(auto i : r.getFeatureVector())
-    {
-        os << i << " ";
-    }
-    os << std::endl ;
-    return os;
-}
-
 template<char delimiter>
 std::istream& operator>>(std::istream& is, WordDelimitedBy<delimiter>& output)
 {
@@ -76,7 +20,6 @@ std::istream& operator>>(std::istream& is, WordDelimitedBy<delimiter>& output)
    return is;
 }
 
-// Implementation of Record Class
 void Record::setRecord(std::string data, int n) {
     std::istringstream iss(data);
     std::vector<std::string> tokens{std::istream_iterator<WordDelimitedBy<';'>>{iss}, std::istream_iterator<WordDelimitedBy<';'>>{}}; 
@@ -88,20 +31,13 @@ void Record::setRecord(std::string data, int n) {
     }
 }
 
-Record(int y, int n, int N, std::vector<std::string> nonFeatureVector, std::vector<double> featureVector):
-        _numVariables(y), _numNonNumericalVariables(n), _numNumericalVariables(N) {
-{
-                _nonFeatureVector = *(new std::vector<std::string>(nonFeatureVector));
-                _featureVector = *(new std::vector<double>(featureVector));
-
+void Matrix::addRecord(Record record) {
+    _data.push_back(record);
 }
 
-
-double Similarity::compute_pairwise_similarity() {
-    std::vector<double> A = _record1.getFeatureVector();
-    std::vector<double> B = _record2.getFeatureVector();
+double Similarity::compute_pairwise_similarity(std::vector<double> A, std::vector<double> B) {
     double dot = 0.0, denom_a = 0.0, denom_b = 0.0;
-        for(unsigned int i = 0u; i < _record1.getNumNumericVariables(); ++i) {
+        for(unsigned int i = 0u; i < A.size(); ++i) {
             dot += A[i] * B[i] ;
             denom_a += A[i] * A[i];
             denom_b += B[i] * B[i];
@@ -117,13 +53,22 @@ void KMeans::compute_centroids() {
             std::vector<double> entry = _dataSet.getData(id).getFeatureVector();
             _centroids[id] = entry;
             count++;
+            Cluster cluster;
+            cluster.set_id(count);
+            cluster.set_centralValues(entry);
+            add_cluster(cluster);
         }
     }
 }
 
 void KMeans::process() {
-    
+    Similarity cosine_similarity;
+    for(int i = 0;i < _dataSet.getNumRows();i++) {
+        double dissimilarity = 0.0;
+        std::map<int, std::vector<double>> iterator it;
+        for(it = _centroids.begin(); it != _centroids.end(); it++) {
+            dissimilarity = 1 - cosine_similarity.compute_pairwise_similarity(_dataSet.getData(i).getFeatureVector(), it->second);
+        }
+        
+    }
 }
-
-// Implementation of NormalizedDisComp
-

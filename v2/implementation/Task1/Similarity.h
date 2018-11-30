@@ -7,8 +7,9 @@
 #define SIMILARITY_H_
 
 class Similarity {
-    private : Record _record1, _record2; 
-    public : double compute_pairwise_similarity();
+    private : 
+    public : Similarity() {}
+             double compute_pairwise_similarity(std::vector<double>, std::vector<double>);
 };
 
 #endif // !SIMILARITY_H_
