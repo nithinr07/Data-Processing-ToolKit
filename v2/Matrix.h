@@ -14,6 +14,7 @@ class Matrix{
   
  public:
   Matrix() ; // constructor //
+  Matrix(int numRows, int numCols):_numRows(numRows), _numCols(numCols) {}
   ~Matrix()  ; // destructor //
   Matrix(Matrix&) ; // copy constructor //
   Matrix(int, int, std::vector<Record>);
@@ -23,7 +24,7 @@ class Matrix{
 
   friend std::ostream& operator<< (std::ostream &, Matrix &) ;
 
-  // get functions //
+  // getters //
   int numRows() { return _numRows ; }
   int numCols() { return _numCols ; }
   

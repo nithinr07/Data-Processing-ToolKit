@@ -5,7 +5,7 @@
 
 class SymmetricSquareMatrix {
 
-    private: std::vector<std::vector<double> > _data;
+    private: std::vector<std::vector<double>> _data;
              int _numRows;
              int _numColums;   
 
@@ -20,13 +20,13 @@ class SymmetricSquareMatrix {
             double getElementOfMatrix(int i, int j){
                 return _data[i][j];
             }
-            int getNumRows(){return _numRows;}
+            int getNumRows(){ return _numRows; }
             int getNumColums() { return _numColums; }
             std::vector <std::vector<double> > get_data() { return _data; }
             void setElementOfMatrix(int i,int j,double value){
                 _data[i][j] = value;
             }
-            void setNumRows(int rows){_numRows = rows;}
+            void setNumRows(int rows){ _numRows = rows; }
             void setNumColums(int colums) { _numColums = colums; }
 };
 

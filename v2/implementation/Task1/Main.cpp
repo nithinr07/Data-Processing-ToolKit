@@ -13,7 +13,7 @@
 using namespace std;
 
 template<char delimiter>
-istream& operator>>(istream& is, const WordDelimitedBy<delimiter>& output)
+istream& operator>>(istream& is, WordDelimitedBy<delimiter>& output)
 {
    getline(is, output, delimiter);
    return is;
