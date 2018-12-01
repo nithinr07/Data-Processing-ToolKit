@@ -13,10 +13,10 @@ class Matrix {
             Matrix(int, int, std::vector<Record>);
             // Matrix(const Matrix&);
             // ~Matrix();
-            void addRecord(Record);
+            void addRecord(Record&);
             Record getData(int i){ return _data[i]; }
-            int getNumRows() { return _numRows; }
-
+            int numRows() { return _numRows; }
+            int numCols() { return _numCols; }
 };
 
 #endif // !MATRIX_H_
