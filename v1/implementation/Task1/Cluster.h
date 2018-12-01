@@ -18,6 +18,8 @@ class Cluster {
             void set_centralValues(std::vector<double> centralValues) { _centralValues = centralValues; }
             void update_centralValue(int i, double value) { _centralValues[i] = value; }
             void add_vector(Vector data) { _vectors.push_back(data); }
+    friend std::ostream& operator<<(std::ostream&, const Cluster&);
+
 };
 
 #endif // !CLUSTER_H_

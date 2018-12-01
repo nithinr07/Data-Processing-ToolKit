@@ -15,7 +15,7 @@ class Matrix{
  public:
   Matrix() ; // constructor //
   Matrix(int numRows, int numCols):_numRows(numRows), _numCols(numCols) {}
-  ~Matrix()  ; // destructor //
+//   ~Matrix()  ; // destructor //
   Matrix(Matrix&) ; // copy constructor //
   Matrix(int, int, std::vector<Record>);
 

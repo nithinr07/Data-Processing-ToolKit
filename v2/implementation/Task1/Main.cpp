@@ -35,7 +35,7 @@ int main(int argc, char **argv) {
     srand(time(NULL));
     int n = stoi(argv[1]);
     ifstream inputFile;
-    inputFile.open("../Lab-project-modified-datasets_20181114/AirQualityUCI/AirQualityUCI_mod.csv");
+    inputFile.open("../../Lab-project-modified-datasets_20181114/AirQualityUCI/AirQualityUCI_mod.csv");
     string line;
     vector<string> input_matrix;
     string init;

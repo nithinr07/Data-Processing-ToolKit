@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <map>
+#include <iostream>
 
 #ifndef K_MEANS_H_
 #define K_MEANS_H_
@@ -18,6 +19,7 @@ class KMeans {
             void add_cluster(Cluster cluster) { _clusters.push_back(cluster); }
             void update_centroid(int, int, std::vector<double>);
             Cluster get_cluster_by_id(int);
+    friend std::ostream& operator<<(std::ostream&, const KMeans&);
 };
 
 #endif // !K_MEANS_H_

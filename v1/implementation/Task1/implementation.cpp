@@ -31,7 +31,7 @@ void Record::setRecord(std::string data, int n) {
     }
 }
 
-void Matrix::addRecord(Record record) {
+void Matrix::addRecord(Record &record) {
     _data.push_back(record);
 }
 
@@ -45,10 +45,14 @@ double Similarity::compute_pairwise_similarity(std::vector<double> A, std::vecto
     return dot / (sqrt(denom_a) * sqrt(denom_b));    
 }
 
+SymmetricSquareMatrix Similarity::generate_similarity_matrix(std::vector<Cluster> clusters) {
+    // SymmetricSquareMatrix ssm;
+}
+
 void KMeans::compute_centroids() {
     int count = 0;
     while(count != _K) {
-        int id = rand() % (_dataSet.getNumRows() + 1);
+        int id = rand() % (_dataSet.numRows() + 1);
         if(_centroids.count(id) == 0) {
             std::vector<double> entry = _dataSet.getData(id).getFeatureVector();
             _centroids[id] = entry;
@@ -88,7 +92,7 @@ void KMeans::update_centroid(int id, int clusterSize, std::vector<double> entry)
 
 void KMeans::process(int maxIterations) {
     Similarity cosine_similarity;
-    for(int i = 0;i < _dataSet.getNumRows();i++) {
+    for(int i = 0;i < _dataSet.numRows();i++) {
         double dissimilarity = 0.0;
         int id = -1;
         std::map<int, std::vector<double>>::iterator it;
@@ -102,19 +106,46 @@ void KMeans::process(int maxIterations) {
         for(int j = 0;j < _clusters.size();j++) {
             if(id == _clusters[j].get_id()) {
                 Vector data(_dataSet.getData(i));
+                data.set_cluster_id(id);
                 _clusters[j].add_vector(data);
                 update_centroid(id, _clusters[j].get_size(), data.getFeatureVector());
             }
         }
     }
-    for(int i = 0;i < maxIterations -1;i++) {
-        for(int i = 0;i < _dataSet.getNumRows();i++) {
-            std::map<int, std::vector<double>>::iterator it;
-            
-            for(it = _centroids.begin(); it != _centroids.end(); it++) {
-                double dissimilarity1 = cosine_similarity.compute_pairwise_similarity(_dataSet.getData(i).getFeatureVector(), it -> second);
+    // for(int i = 0;i < maxIterations -1;i++) {
+    //     for(int i = 0;i < _dataSet.numRows();i++) {
+    //         int id = 
+    //         std::map<int, std::vector<double>>::iterator it;
+    //         for(it = _centroids.begin(); it != _centroids.end(); it++) {
+    //             double dissimilarity1 = 1 - cosine_similarity.compute_pairwise_similarity(_dataSet.getData(i).getFeatureVector(), it -> second);
 
-            }
-        }
+    //         }
+    //     }
+    // }
+}
+
+template <typename T>
+std::ostream& operator<< (std::ostream& os, const std::vector<T>& v) {
+  if ( !v.empty() ) {
+    std::copy (v.begin(), v.end(), std::ostream_iterator<T>(os, " "));
+  }
+  return os;
+}
+
+std::ostream& operator<<(std::ostream& os, const Vector& vector) {
+    os << vector._clusterId;
+    return os;
+}
+
+std::ostream& operator<<(std::ostream& os, const Cluster& cluster) {
+    os << cluster._id << "\t" << cluster._vectors << "\t" << cluster._centralValues;
+    return os;
+}
+
+std::ostream& operator<<(std::ostream& os, const KMeans& kmeans) {
+    for(int i = 0;i < kmeans._K;i++) {
+        os << kmeans._clusters[i] << std::endl;
     }
+    os << std::endl;
+    return os;
 }
