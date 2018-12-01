@@ -13,8 +13,9 @@ class Variance
 
     public:
         Variance(){}
-        std::vector<double> computeVariances(std::vector<Variable>);
-        std::vector<Variable> normalized_variables();
+        void computeVariance(std::vector<Variable>);
+        double normalize(double, double, double);
+        std::vector<Variable> normalizedVariables(std::vector<Variable>);
         
 
 };
