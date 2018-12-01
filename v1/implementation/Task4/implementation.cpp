@@ -32,7 +32,7 @@ void Record::setRecord(std::string data, int n)
 }
 
 /*Matrix.h implementation*/
-void Matrix::addRecord(Record &record)
+void Matrix::addRecord(Record record)
 {
     _data.push_back(record);
 }
@@ -41,7 +41,7 @@ void Matrix::addRecord(Record &record)
 void Variable::setVariable(int varIndex, Matrix input)
 {
     _varIndex = varIndex;
-    _numOfValues = input.numRows();
+    _numOfValues = input.getNumRows();
     for(int i = 0; i < _numOfValues; i++)
     {
         Record record = input.getData(i);
