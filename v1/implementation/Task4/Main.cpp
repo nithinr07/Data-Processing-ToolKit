@@ -36,8 +36,8 @@ int main(int argc, char **argv) {
     int n = stoi(argv[1]);
     ifstream inputFile;
     ofstream outputFile;
-    // inputFile.open("../../../Lab-project-modified-datasets_20181114/AirQualityUCI/AirQualityUCI_mod.csv");
-    inputFile.open("input.csv");
+    inputFile.open("../../../Lab-project-modified-datasets_20181114/AirQualityUCI/AirQualityUCI_mod.csv");
+    //inputFile.open("../Task1/input.csv");
     outputFile.open("output.csv");
     string line;
     vector<string> input_matrix;
@@ -74,8 +74,8 @@ int main(int argc, char **argv) {
     cm.normalizeMatrix(CM);
     vector<int> ordering = var.ordering(variables);
 
-    fout<<cm;
-    fout.close();
+    outputFile<<cm;
+    outputFile.close();
     return 0; 
 }
 

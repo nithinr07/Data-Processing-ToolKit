@@ -21,24 +21,6 @@
 //    return is;
 //}
 
-/*Record.h implementation*/
-void Record::setRecord(std::string data, int n) 
-{
-    std::istringstream iss(data);
-    std::vector<std::string> tokens{std::istream_iterator<WordDelimitedBy<','>>{iss}, std::istream_iterator<WordDelimitedBy<','>>{}};
-    for(int i = 0;i < n;i++)
-        _nonFeatureVector.push_back(tokens[i]);
-    for(int i = 0;i < _numNumericalVariables;i++)
-        _featureVector.push_back(stod(tokens[i + n]));
-}
-
-/*Matrix.h implementation*/
-void Matrix::addRecord(Record &record)
-{
-    _data.push_back(record);
-}
-
-/* Variable.h implementation*/
 void Variable::setVariable(int varIndex, Matrix input)
 {
     _varIndex = varIndex;
