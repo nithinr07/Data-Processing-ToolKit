@@ -88,7 +88,7 @@ vector<int> ReorderingSSM::CuthillMckee(){
 }
 
 
-vector<int> ReorderingSSM::ReverseCuthillMukee(){
+vector<int> ReorderingSSM::ReverseCuthillMckee(){
     vector<int> cuthill = CuthillMckee();
     int n = cuthill.size();
     if(n%2 == 0) n -= 1;

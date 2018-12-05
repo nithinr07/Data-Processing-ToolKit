@@ -1,6 +1,6 @@
 #include<iostream>
 #include<vector>
-#include "../SymmetricSquareMatrix.h"
+#include "../../SymmetricSquareMatrix.h"
 using namespace std;
 
 #ifndef Reordering_S_S_M_H_
@@ -20,7 +20,7 @@ class ReorderingSSM {
 
         // class methods
         vector<int> CuthillMckee();
-        vector<int> ReverseCuthillMukee();
+        vector<int> ReverseCuthillMckee();
         void sparsification();
         vector<double> degreeGenerator();
 

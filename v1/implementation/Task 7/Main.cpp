@@ -24,7 +24,7 @@ int main(){
 
     SymmetricSquareMatrix matrix(data);
     ReorderingSSM m(matrix);
-    vector<int> r = m.ReverseCuthillMukee();
+    vector<int> r = m.ReverseCuthillMckee();
     cout << r << endl;
     return 0;
 }
