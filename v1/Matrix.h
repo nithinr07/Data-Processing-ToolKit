@@ -13,10 +13,9 @@ class Matrix{
     std::vector<Record> _data;
   
  public:
-  Matrix(){}  // constructor //
+  Matrix();  // constructor //
   //~Matrix(){} // destructor //
   Matrix(Matrix&) ; // copy constructor //
-//>>>>>>> Stashed changes
   Matrix(int, int, std::vector<Record>);
 
   void addRecord(Record &);

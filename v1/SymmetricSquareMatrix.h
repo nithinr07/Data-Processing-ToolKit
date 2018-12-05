@@ -16,7 +16,7 @@ class SymmetricSquareMatrix {
             }
             SymmetricSquareMatrix(){}
             // SymmetricSquareMatrix(SymmetricSquareMatrix&){}
-            ~SymmetricSquareMatrix() {}
+            // ~SymmetricSquareMatrix() {}
             double getElementOfMatrix(int i, int j){
                 return _data[i][j];
             }
