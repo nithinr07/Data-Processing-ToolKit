@@ -7,12 +7,12 @@ EigenCalc::EigenCalc(std::vector <std::vector <double> > data) {
 
 
 // copy constructor
-EigenCalc::EigenCalc(const EigenCalc& ec) {
-    ssm = SymmetricSquareMatrix(ec.ssm);
-    _eigen_vectors = ec._eigen_vectors;
-    _eigen_values = ec._eigen_values;
+// EigenCalc::EigenCalc(const EigenCalc& ec) {
+//     ssm = SymmetricSquareMatrix(ec.ssm);
+//     _eigen_vectors = ec._eigen_vectors;
+//     _eigen_values = ec._eigen_values;
     
-};
+// };
 
 
 // eigen vector calculation
