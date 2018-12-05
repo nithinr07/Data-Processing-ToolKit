@@ -3,6 +3,7 @@
 #include "../../Record.h"
 #include "WordDelimitedBy.h"
 #include "KMeans.h"
+#include "SimilarityMatrix.h"
 
 #include <iostream>
 #include <fstream>
@@ -31,10 +32,12 @@ int main(int argc, char **argv) {
     int n = stoi(argv[1]);
     int k = stoi(argv[2]);
     ifstream inputFile;
-    ofstream outputFile;
-    inputFile.open("../../../Lab-project-modified-datasets_20181114/AirQualityUCI/AirQualityUCI_mod.csv");
-    // inputFile.open("input.csv");
-    outputFile.open("output.csv");
+    ofstream outputFile1;
+    ofstream outputFile2;
+    // inputFile.open("../../../Lab-project-modified-datasets_20181114/AirQualityUCI/AirQualityUCI_mod.csv");
+    inputFile.open("input.csv");
+    outputFile1.open("kmeans.csv");
+    outputFile2.open("similarity.csv");
     string ignore;
     getline(inputFile, ignore);
     string line;
@@ -58,10 +61,14 @@ int main(int argc, char **argv) {
         record.setRecord(input_matrix[i], n);
         matrix.addRecord(record);
     }
-    // cout << matrix;
     KMeans kmeans(k, matrix);
     kmeans.process();
-    outputFile << kmeans << endl;
+    outputFile1 << kmeans << endl;
+    vector<vector<double>> data;
+    SimilarityMatrix sm(data);
+    sm.generate_matrix(matrix);
+    outputFile2 << sm;
     inputFile.close();
+    outputFile1.close();
     return 0;
 }
