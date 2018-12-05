@@ -5,7 +5,7 @@
 
 class SymmetricSquareMatrix {
 
-    protected: std::vector<std::vector<double>> _data;
+    protected: std::vector<std::vector<double> > _data;
              int _numRows;
              int _numColums;   
 
@@ -14,9 +14,9 @@ class SymmetricSquareMatrix {
                 _numRows = d.size();
                 _numColums = d[0].size();
             }
-            SymmetricSquareMatrix(){}
+            SymmetricSquareMatrix() {}
             // SymmetricSquareMatrix(SymmetricSquareMatrix&){}
-            ~SymmetricSquareMatrix() {}
+            // ~SymmetricSquareMatrix() {}
             double getElementOfMatrix(int i, int j){
                 return _data[i][j];
             }
