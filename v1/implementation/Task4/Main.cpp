@@ -8,11 +8,13 @@
 
 
 #include <iostream>
+#include <vector>
 #include <fstream>
 #include <sstream>
 #include <iterator>
 #include <cmath>
 #include <bits/time.h>
+
 
 using namespace std;
 
@@ -23,67 +25,55 @@ istream& operator>>(istream& is, WordDelimitedBy<delimiter>& output)
    return is;
 }
 
-int get_row_size(string init)
-{
+int get_col_size(string init) {
     istringstream iss(init);
     vector<string> tokens{istream_iterator<WordDelimitedBy<','>>{iss}, istream_iterator<WordDelimitedBy<','>>{}};
-    return stoi(tokens.at(0));
+    return tokens.size(); 
 }
 
-int get_col_size(string init) 
-{
-    istringstream iss(init);
-    vector<string> tokens{istream_iterator<WordDelimitedBy<','>>{iss}, istream_iterator<WordDelimitedBy<','>>{}};
-    return stoi(tokens.at(1)); 
-}
-
-int main(int argc, char **argv)
-{
+int main(int argc, char **argv) {
     srand(time(NULL));
     int n = stoi(argv[1]);
     ifstream inputFile;
-    inputFile.open("../../../Lab-project-modified-datasets_20181114/AirQualityUCI/AirQualityUCI_mod.csv");
+    ofstream outputFile;
+    //inputFile.open("../../../Lab-project-modified-datasets_20181114/AirQualityUCI/AirQualityUCI_mod.csv");
+    inputFile.open("../Task1/input.csv");
+    outputFile.open("output.csv");
     string line;
     vector<string> input_matrix;
-    string init;
-    getline(inputFile, init);
-    int count = 0;
-    if(inputFile.is_open()) 
-    {
-        while(getline(inputFile, line))
+    if(inputFile.is_open()) {
+        while(getline(inputFile, line)) {
             input_matrix.push_back(line);
+        }
         inputFile.close();
-    }
-    else
-    {
+    } else {
         cout << "Unable to open file" << endl;
         exit(0);
     }
-    int x = get_row_size(init);
-    int y = get_col_size(init);
+    int x = input_matrix.size();
+    int y = get_col_size(input_matrix[0]);
     Matrix matrix;
-    for(int i = 0;i < x;i++)
-    {
+    for(int i = 0;i < x;i++) {
         Record record(y, n, y - n);
         record.setRecord(input_matrix[i], n);
         matrix.addRecord(record);
     }
-    inputFile.close();
+
 
     vector<Variable> variables;
     for(int i = 0; i < (y-n); i++)
         variables[i].setVariable(i,matrix);
-    computeVariance(variables);
-    normalizedVariables(variables);
-    CovarianceMatrix cm();
-    cm = generate_matrix(variables);
-    cm.normalizeMatrix();
-    vector ordering = ordering(variables);
 
-    ofstream fout;
-    fout.open("out.csv");
-    fout<<cm;
-    fout.close();
+    Variance var;
+    var.computeVariance(variables);
+    var.normalizedVariables(variables);
+    CovarianceMatrix cm;
+    std::vector<std::vector<double>> CM = cm.generate_matrix(variables);
+    cm.normalizeMatrix(CM);
+    vector<int> ordering = var.ordering(variables);
+
+    outputFile<<cm;
+    outputFile.close();
     return 0; 
 }
 
