@@ -4,6 +4,7 @@
 #include "../Task1/WordDelimitedBy.h"
 #include "Variable.h"
 #include "Variance.h"
+#include "CovarianceMatrix.h"
 
 #include <iostream>
 #include <fstream>
@@ -32,7 +33,7 @@ void Record::setRecord(std::string data, int n)
 }
 
 /*Matrix.h implementation*/
-void Matrix::addRecord(Record record)
+void Matrix::addRecord(Record &record)
 {
     _data.push_back(record);
 }
@@ -41,7 +42,7 @@ void Matrix::addRecord(Record record)
 void Variable::setVariable(int varIndex, Matrix input)
 {
     _varIndex = varIndex;
-    _numOfValues = input.getNumRows();
+    _numOfValues = input.numRows();
     for(int i = 0; i < _numOfValues; i++)
     {
         Record record = input.getData(i);
@@ -50,7 +51,7 @@ void Variable::setVariable(int varIndex, Matrix input)
 }
 
 /* Variance.h implementation*/
-void Variance::computeVariance(std::vector<Variable> variables)
+void Variable::computeVariance(std::vector<Variable> variables)
 {
     for(int i = 0; i < variables.size(); i++)
     {
@@ -61,6 +62,7 @@ void Variance::computeVariance(std::vector<Variable> variables)
        for(int j = 0; j < n; j++)
            sum += vals[j]; 
        double mean = sum/n;
+       v.set_mean(mean);
        double squareSum = 0;
        for(int j = 0; j < n; j++)
            squareSum += (vals[j] * vals[j]);
@@ -74,6 +76,10 @@ double Variance::normalize(double Max, double Min, double Value)
     return (Value - Min) / (Max - Min);
 }
 
+bool operator<(const Variable &v1, const Variable &v2)
+{
+    return v1.get_variance() < v2.get_variance();
+}
 
 std::vector<Variable> Variance::normalizedVariables(std::vector<Variable> variables)
 {
@@ -98,9 +104,97 @@ std::vector<Variable> Variance::normalizedVariables(std::vector<Variable> variab
     }
 
     //Sorted according to normalized variances
-    //std::sort(variables.begin(),variables.end(),varianceSort());
-    //return variables;
+    std::sort(variables.begin(), variables.end());
+
+    return variables;
+     
+}
+
+/*CovarianceMatrix implementation*/
+double Variance::computeCovariance(Variable v1, Variable v2)
+{
+    std::vector<double> val1 = v1.get_values();
+    std::vector<double> val2 = v2.get_values();
+    double mean1 = v1.get_mean();
+    double mean2 = v2.get_mean();
+    int n = v1.get_numOfValues();
     
+    double sum = 0;
+    for(int i = 0; i < n; i++)
+        sum += (val1[i]-mean1)*(val2[i]-mean2); 
+    double cov = sum/n;   
+    return cov;
+}
+
+CovarianceMatrix CovarianceMatrix::generate_matrix(std::vector<Variable> variables)
+{
+    std::vector<std::vector<double>> elements; 
+    for(int i = 0; i < variables.size(); i++)
+    {
+        for(int j = 0; j < variables.size(); j++)
+        {
+            if(i == j)
+                elements[i][j] = variables[i].get_variance();
+            else
+                elements[i][j] = computeCovariance(variables[i], variables[j]);
+        }
+    }
+    
+    CovarianceMatrix CovMatrix(elements); 
+    return CovMatrix;
+}
+
+void CovarianceMatrix::normalizeMatrix()
+{
+    double max = 0;
+    for(int i = 0; i < _size; i++)
+    {
+        for(int j = 0; j < _size; j++)
+        {
+            if(_elements[i][j] > max)
+                max = _elements[i][j];
+        }
+    }
+    double min = 999999;
+    for(int i = 0; i < _size; i++)
+    {
+        for(int j = 0; j < _size; j++)
+        {
+            if(_elements[i][j] < min)
+                min = _elements[i][j];
+        }
+    }
+    std::vector<std::vector<double>> elements = _elements;
+    for(int i = 0; i < _size; i++)
+    {
+        for(int j = 0; j < _size; j++)
+            elements[i][j] = normalize(max, min, elements[i][j]);
+    }    
 }
 
 
+std::vector<int> Variance::ordering(std::vector<Variable> variables)
+{
+    std::reverse(variables.begin(), variables.end());
+    std::vector<int> ordering;
+    for(int i = 0; i < variables.size(); i++)
+    {   
+        int in = variables[i].get_varIndex();
+        ordering.push_back(in);
+    }
+
+    return ordering;
+}
+
+std::ostream& operator<< (std::ostream &os, CovarianceMatrix &cm) 
+{
+	for(auto i : cm.get_elements())
+	{
+		for(auto j : i)
+		{
+			os << j <<" ";
+		}
+		os << std::endl;
+	}
+	return os;
+}
