@@ -26,15 +26,14 @@ Matrix::Matrix(): _numRows(0), _numCols(0) {
 
 }
 
-Matrix::~Matrix() {
+// Matrix::~Matrix() {
 
-	for (int i = 0; i < _data.size(); ++i)
-		_data[i].~Record();
+// 	for (int i = 0; i < _data.size(); ++i)
+// 		_data[i].~Record();
 
-    _data.clear();
-  _numRows = 0 ; _numCols = 0 ;
-
-}
+//     _data.clear();
+//   _numRows = 0 ; _numCols = 0 ;
+// }
 
 Matrix::Matrix(Matrix& m) :
   _numRows(m._numRows), _numCols(m._numCols){
@@ -75,22 +74,23 @@ Record::Record(const Record &r) {
 	_nonFeatureVector = std::vector<std::string>(r._nonFeatureVector);
 	_featureVector = std::vector<double>(r._featureVector);
 }
-Record::~Record()
-{
-	_nonFeatureVector.clear();
-	_featureVector.clear();
-	_numNumericalVariables = 0;
-	_numVariables = 0;
-	_numNonNumericalVariables = 0;
-}
+
+// Record::~Record()
+// {
+// 	_nonFeatureVector.clear();
+// 	_featureVector.clear();
+// 	_numNumericalVariables = 0;
+// 	_numVariables = 0;
+// 	_numNonNumericalVariables = 0;
+// }
 
 std::ostream& operator<< (std::ostream &os, Record &r)
 {
-    for(auto i : r.getFeatureVector())
+    for(int i = 0;i < r._featureVector.size();i++)
     {
-        os << i << " ";
+        os << r._featureVector[i] << " ";
     }
-    os << std::endl ;
+    os << std::endl;
     return os;
 }
 
@@ -103,7 +103,7 @@ std::istream& operator>>(std::istream& is, WordDelimitedBy<delimiter>& output)
 
 void Record::setRecord(std::string data, int n) {
     std::istringstream iss(data);
-    std::vector<std::string> tokens{std::istream_iterator<WordDelimitedBy<';'>>{iss}, std::istream_iterator<WordDelimitedBy<';'>>{}}; 
+    std::vector<std::string> tokens{std::istream_iterator<WordDelimitedBy<','>>{iss}, std::istream_iterator<WordDelimitedBy<','>>{}}; 
     for(int i = 0;i < n;i++) {
         _nonFeatureVector.push_back(tokens[i]);
     }

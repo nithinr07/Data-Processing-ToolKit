@@ -15,10 +15,10 @@ class KMeans {
              std::map<int, std::vector<double>> _centroids;
     public: KMeans(int, Matrix);
             void compute_centroids();
-            void process(int);
+            void process();
             void add_cluster(Cluster cluster) { _clusters.push_back(cluster); }
             void update_centroid(int, int, std::vector<double>);
-            Cluster get_cluster_by_id(int);
+            Cluster& get_cluster_by_id(int);
     friend std::ostream& operator<<(std::ostream&, const KMeans&);
 };
 
