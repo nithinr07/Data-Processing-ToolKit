@@ -20,20 +20,7 @@ std::istream& operator>>(std::istream& is, WordDelimitedBy<delimiter>& output)
    return is;
 }
 
-void Record::setRecord(std::string data, int n) {
-    std::istringstream iss(data);
-    std::vector<std::string> tokens{std::istream_iterator<WordDelimitedBy<','>>{iss}, std::istream_iterator<WordDelimitedBy<','>>{}}; 
-    for(int i = 0;i < n;i++) {
-        _nonFeatureVector.push_back(tokens[i]);
-    }
-    for(int i = 0;i < _numNumericalVariables;i++) {
-        _featureVector.push_back(stod(tokens[i + n]));
-    }
-}
-
-void Matrix::addRecord(Record &record) {
-    _data.push_back(record);
-}
+KMeans::KMeans(int K, Matrix dataSet):_K(K), _dataSet(dataSet) {}
 
 double Similarity::compute_pairwise_similarity(std::vector<double> A, std::vector<double> B) {
     double dot = 0.0, denom_a = 0.0, denom_b = 0.0;
@@ -50,28 +37,36 @@ SymmetricSquareMatrix Similarity::generate_similarity_matrix(std::vector<Cluster
 }
 
 void KMeans::compute_centroids() {
+    // std::cout << _dataSet;
     int count = 0;
     while(count != _K) {
-        int id = rand() % (_dataSet.numRows() + 1);
+        int id = (int)rand() % (_dataSet.numRows());
+        // std::cout << id << std::endl;
         if(_centroids.count(id) == 0) {
             std::vector<double> entry = _dataSet.getData(id).getFeatureVector();
             _centroids[id] = entry;
             count++;
+            // Cluster cluster(entry);
             Cluster cluster;
             cluster.set_id(id);
-            cluster.set_centralValues(entry);
+            for(int i = 0;i < entry.size();i++) {
+                // std::cout << entry[i] << " ";
+                cluster.set_centralValues(entry[i]);
+            }
+            // std::cout << std::endl;
             add_cluster(cluster);
         }
     }
 }
 
-Cluster KMeans::get_cluster_by_id(int id) {
-    Cluster cluster;
+Cluster& KMeans::get_cluster_by_id(int id) {
+    // Cluster cluster;
     for(int i = 0;i < _clusters.size();i++) {
         if(_clusters[i].get_id() == id) 
-            cluster = _clusters[i];
+            return _clusters[i];
     }
-    return cluster;
+    // return cluster;
+    
 }
 
 void KMeans::update_centroid(int id, int clusterSize, std::vector<double> entry) {
@@ -85,30 +80,35 @@ void KMeans::update_centroid(int id, int clusterSize, std::vector<double> entry)
         sum = currentCentroid[i] * (clusterSize - 1) + entry[i];
         average = sum / clusterSize;
         currentCentroid[i] = average;
-        Cluster cluster = get_cluster_by_id(id);
-        cluster.update_centralValue(i, average);
+        get_cluster_by_id(id).update_centralValue(i, average);
+        // cluster.update_centralValue(i, average);
+        // std::cout << get_cluster_by_id(id);
     }
 }
 
-void KMeans::process(int maxIterations) {
+void KMeans::process() {
+    compute_centroids();
     Similarity cosine_similarity;
     for(int i = 0;i < _dataSet.numRows();i++) {
-        double dissimilarity = 0.0;
+        double dissimilarity = 1.0;
         int id = -1;
         std::map<int, std::vector<double>>::iterator it;
         for(it = _centroids.begin(); it != _centroids.end(); it++) {
             double value = 1.0 - cosine_similarity.compute_pairwise_similarity(_dataSet.getData(i).getFeatureVector(), it -> second);
+            // std::cout << value << std::endl;
             if(dissimilarity > value) {
                 dissimilarity = value;
                 id = it -> first;
             }
         }
         for(int j = 0;j < _clusters.size();j++) {
+            // std::cout << id << "   " << _clusters[j].get_id() << std::endl;
             if(id == _clusters[j].get_id()) {
                 Vector data(_dataSet.getData(i));
-                data.set_cluster_id(id);
+                data.set_cluster_id(j);
                 _clusters[j].add_vector(data);
                 update_centroid(id, _clusters[j].get_size(), data.getFeatureVector());
+                break;
             }
         }
     }
@@ -127,25 +127,32 @@ void KMeans::process(int maxIterations) {
 template <typename T>
 std::ostream& operator<< (std::ostream& os, const std::vector<T>& v) {
   if ( !v.empty() ) {
-    std::copy (v.begin(), v.end(), std::ostream_iterator<T>(os, " "));
+    std::copy (v.begin(), v.end(), std::ostream_iterator<T>(os, ","));
   }
   return os;
 }
 
 std::ostream& operator<<(std::ostream& os, const Vector& vector) {
-    os << vector._clusterId;
+    os << vector._nonFeatureVector << vector._featureVector << vector._clusterId;
     return os;
 }
 
 std::ostream& operator<<(std::ostream& os, const Cluster& cluster) {
-    os << cluster._id << "\t" << cluster._vectors << "\t" << cluster._centralValues;
+    for(int i = 0;i < cluster._vectors.size();i++) {
+        if(i < cluster._vectors.size()-1)
+            os << cluster._vectors[i] << std::endl;
+        else
+            os << cluster._vectors[i];
+    }
     return os;
 }
 
 std::ostream& operator<<(std::ostream& os, const KMeans& kmeans) {
     for(int i = 0;i < kmeans._K;i++) {
-        os << kmeans._clusters[i] << std::endl;
+        if(i < kmeans._K - 1)
+            os << kmeans._clusters[i] << std::endl;
+        else
+            os << kmeans._clusters[i];
     }
-    os << std::endl;
     return os;
 }

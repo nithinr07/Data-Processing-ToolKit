@@ -4,7 +4,7 @@
 #ifndef RECORD_H_
 #define RECORD_H_
 class Record {
-    private: int _numVariables;
+    protected: int _numVariables;
              int _numNonNumericalVariables;
              int _numNumericalVariables;
              std::vector<std::string> _nonFeatureVector; 
@@ -26,7 +26,7 @@ class Record {
 
 
             Record(const Record&);
-            ~Record();
+            // ~Record();
 
             /*
                 set functions
