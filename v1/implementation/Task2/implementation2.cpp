@@ -85,19 +85,6 @@ DistanceMatrix::DistanceMatrix(int M,int N,std::vector<Record> data) : Matrix(M,
 	}
 }
 
-DistanceMatrix::~DistanceMatrix()
-{
-	hypotheticalAverageRecord.~Record();
-	this->~Matrix();
-	indexOrdering.clear();
-	indices.clear();
-	for (int i = 0; i < _distanceMatrix.size(); ++i)
-	{
-		_distanceMatrix[i].clear();			
-	}
-	_distanceMatrix.clear();
-}
-
 void DistanceMatrix::printReordering()
 {
 	for(int i : indexOrdering)

@@ -14,12 +14,12 @@
 #include <vector>
 #include <algorithm>
 
-template<char delimiter>
-std::istream& operator>>(std::istream& is, WordDelimitedBy<delimiter>& output)
-{
-    std::getline(is, output, delimiter);
-    return is;
-}
+//template<char delimiter>
+//std::istream& operator>>(std::istream& is, WordDelimitedBy<delimiter>& output)
+//{
+//    std::getline(is, output, delimiter);
+//    return is;
+//}
 
 /*Record.h implementation*/
 void Record::setRecord(std::string data, int n) 
@@ -51,7 +51,7 @@ void Variable::setVariable(int varIndex, Matrix input)
 }
 
 /* Variance.h implementation*/
-void Variable::computeVariance(std::vector<Variable> variables)
+void Variance::computeVariance(std::vector<Variable> variables)
 {
     for(int i = 0; i < variables.size(); i++)
     {
@@ -126,9 +126,10 @@ double Variance::computeCovariance(Variable v1, Variable v2)
     return cov;
 }
 
-CovarianceMatrix CovarianceMatrix::generate_matrix(std::vector<Variable> variables)
+std::vector<std::vector<double>> CovarianceMatrix::generate_matrix(std::vector<Variable> variables)
 {
-    std::vector<std::vector<double>> elements; 
+    std::vector<std::vector<double>> elements;
+    Variance var;
     for(int i = 0; i < variables.size(); i++)
     {
         for(int j = 0; j < variables.size(); j++)
@@ -136,23 +137,22 @@ CovarianceMatrix CovarianceMatrix::generate_matrix(std::vector<Variable> variabl
             if(i == j)
                 elements[i][j] = variables[i].get_variance();
             else
-                elements[i][j] = computeCovariance(variables[i], variables[j]);
+                elements[i][j] = var.computeCovariance(variables[i], variables[j]);
         }
     }
-    
-    CovarianceMatrix CovMatrix(elements); 
-    return CovMatrix;
+    return elements;
 }
 
-void CovarianceMatrix::normalizeMatrix()
+void CovarianceMatrix::normalizeMatrix(std::vector<std::vector<double>> elements)
 {
     double max = 0;
+    Variance var;
     for(int i = 0; i < _size; i++)
     {
         for(int j = 0; j < _size; j++)
         {
-            if(_elements[i][j] > max)
-                max = _elements[i][j];
+            if(elements[i][j] > max)
+                max = elements[i][j];
         }
     }
     double min = 999999;
@@ -160,15 +160,14 @@ void CovarianceMatrix::normalizeMatrix()
     {
         for(int j = 0; j < _size; j++)
         {
-            if(_elements[i][j] < min)
-                min = _elements[i][j];
+            if(elements[i][j] < min)
+                min = elements[i][j];
         }
     }
-    std::vector<std::vector<double>> elements = _elements;
     for(int i = 0; i < _size; i++)
     {
         for(int j = 0; j < _size; j++)
-            elements[i][j] = normalize(max, min, elements[i][j]);
+            elements[i][j] = var.normalize(max, min, elements[i][j]);
     }    
 }
 

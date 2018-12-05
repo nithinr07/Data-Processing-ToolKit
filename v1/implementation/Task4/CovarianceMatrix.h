@@ -17,18 +17,16 @@ class CovarianceMatrix : public Matrix
         int _size;
 
     public: 
-        CovarianceMatrix(std::vector<std::vector<double>> elements)
-        {
-            _elements = elements;
-            _size = elements.size();
-        }
+        CovarianceMatrix(){}
         
-        CovarianceMatrix generate_matrix(std::vector<Variable>);
         double computeCovariance(Variable, Variable);
         void computeVariance(std::vector<Variable>);
         double normalize(double, double, double);
-        void normalizeMatrix();
+        void normalizeMatrix(std::vector<std::vector<double>>);
         std::vector<std::vector<double>> get_elements() { return _elements; }
+        std::vector<std::vector<double>> generate_matrix(std::vector<Variable>);
+    friend std::ostream& operator<< (std::ostream &, CovarianceMatrix &) ;
+
 };
 
 #endif //COVARIANCE_MATRIX_H_

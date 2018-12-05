@@ -21,7 +21,6 @@ private:
 	std::vector<std::vector<double>> _distanceMatrix;
 public:
     DistanceMatrix(){}
-    ~DistanceMatrix();
     DistanceMatrix(int M,int N,std::vector<Record> data);
     Record getAvgRecord()
     {
