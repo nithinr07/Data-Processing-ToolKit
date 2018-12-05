@@ -14,7 +14,7 @@ class SymmetricSquareMatrix {
                 _numRows = d.size();
                 _numColums = d[0].size();
             }
-            SymmetricSquareMatrix(){}
+            SymmetricSquareMatrix() {}
             // SymmetricSquareMatrix(SymmetricSquareMatrix&){}
             // ~SymmetricSquareMatrix() {}
             double getElementOfMatrix(int i, int j){

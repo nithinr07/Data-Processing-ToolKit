@@ -38,7 +38,7 @@ void SimilarityMatrix::generate_matrix(Matrix dataSet) {
     for(int i = 0;i < dataSet.numRows();i++) {
         for(int j = 0;j < dataSet.numRows();j++) {
             double value = cosine_similarity.compute_pairwise_similarity(dataSet.getData(i).getFeatureVector(), dataSet.getData(j).getFeatureVector());
-            setElementOfMatrix(i, j, value);
+            _data[i][j] = value;
         } 
     }
 }
@@ -140,9 +140,9 @@ std::ostream& operator<< (std::ostream& os, const std::vector<T>& v) {
 }
 
 std::ostream& operator<<(std::ostream& os,const SimilarityMatrix& sm) {
-    for(int i = 0;i < sm._data.size();i++) {
-        for(int j = 0;j < sm._data.size();j++) {
-            if(j < sm._data.size()-1)
+    for(int i = 0;i < sm._size;i++) {
+        for(int j = 0;j < sm._size;j++) {
+            if(j < sm._size-1)
                 os << sm._data[i][j] << ",";
             else
                 os << sm._data[i][j];

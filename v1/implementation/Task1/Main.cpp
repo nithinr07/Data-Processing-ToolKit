@@ -64,8 +64,8 @@ int main(int argc, char **argv) {
     KMeans kmeans(k, matrix);
     kmeans.process();
     outputFile1 << kmeans << endl;
-    vector<vector<double>> data;
-    SimilarityMatrix sm(data);
+    vector<vector<double>> data(x);
+    SimilarityMatrix sm(data, x);
     sm.generate_matrix(matrix);
     outputFile2 << sm;
     inputFile.close();
