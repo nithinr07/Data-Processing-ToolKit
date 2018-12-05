@@ -29,11 +29,14 @@ int get_col_size(string init) {
 int main(int argc, char **argv) {
     srand(time(NULL));
     int n = stoi(argv[1]);
+    int k = stoi(argv[2]);
     ifstream inputFile;
     ofstream outputFile;
-    // inputFile.open("../../../Lab-project-modified-datasets_20181114/AirQualityUCI/AirQualityUCI_mod.csv");
-    inputFile.open("input.csv");
+    inputFile.open("../../../Lab-project-modified-datasets_20181114/AirQualityUCI/AirQualityUCI_mod.csv");
+    // inputFile.open("input.csv");
     outputFile.open("output.csv");
+    string ignore;
+    getline(inputFile, ignore);
     string line;
     vector<string> input_matrix;
     if(inputFile.is_open()) {
@@ -56,7 +59,7 @@ int main(int argc, char **argv) {
         matrix.addRecord(record);
     }
     // cout << matrix;
-    KMeans kmeans(2, matrix);
+    KMeans kmeans(k, matrix);
     kmeans.process();
     outputFile << kmeans << endl;
     inputFile.close();
