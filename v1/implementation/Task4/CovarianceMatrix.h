@@ -21,6 +21,7 @@ class CovarianceMatrix : public Matrix
         
         double computeCovariance(Variable, Variable);
         void computeVariance(std::vector<Variable>);
+        std::vector<Variable> normalizedVariables(std::vector<Variable>);
         double normalize(double, double, double);
         void normalizeMatrix(std::vector<std::vector<double>>);
         std::vector<std::vector<double>> get_elements() { return _elements; }

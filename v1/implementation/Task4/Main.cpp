@@ -36,8 +36,8 @@ int main(int argc, char **argv) {
     int n = stoi(argv[1]);
     ifstream inputFile;
     ofstream outputFile;
-    inputFile.open("../../../Lab-project-modified-datasets_20181114/AirQualityUCI/AirQualityUCI_mod.csv");
-    //inputFile.open("../Task1/input.csv");
+    //inputFile.open("../../../Lab-project-modified-datasets_20181114/AirQualityUCI/AirQualityUCI_mod.csv");
+    inputFile.open("../Task1/input.csv");
     outputFile.open("output.csv");
     string line;
     vector<string> input_matrix;
@@ -60,16 +60,16 @@ int main(int argc, char **argv) {
         record.setRecord(input_matrix[i], n);
         matrix.addRecord(record);
     }
-
-
-    vector<Variable> variables;
+    //std::vector<std::vector<double>> sample = {{0,0,0,0},{1,1,1,1},{2,2,2,2}};
+    std::vector<Variable> variables(y-n);
     for(int i = 0; i < (y-n); i++)
         variables[i].setVariable(i,matrix);
 
     Variance var;
+    CovarianceMatrix cm;
+    Variable v1;
     var.computeVariance(variables);
     var.normalizedVariables(variables);
-    CovarianceMatrix cm;
     std::vector<std::vector<double>> CM = cm.generate_matrix(variables);
     cm.normalizeMatrix(CM);
     vector<int> ordering = var.ordering(variables);

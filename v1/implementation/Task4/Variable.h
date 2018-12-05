@@ -17,7 +17,7 @@ class Variable
 
              
     public: Variable(){}
-            void setVariable(int, Matrix);
+            void setVariable(int, Matrix&);
             int get_varIndex() { return _varIndex; }
             void set_varIndex(int in) { _varIndex = in;}
             double get_variance() const { return _variance; }
@@ -28,6 +28,8 @@ class Variable
             int get_size() { return _values.size(); }
             void set_values(std::vector<double> values) { _values = values; }
             void computeVariance(std::vector<Variable>);
+            std::vector<Variable> normalizedVariables(std::vector<Variable>);
+            double computeCovariance(Variable, Variable);
             std::vector<double> get_values() { return _values; }
 
 
