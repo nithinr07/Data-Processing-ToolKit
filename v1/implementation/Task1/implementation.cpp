@@ -2,6 +2,7 @@
 #include "../../Matrix.h"
 #include "../../Record.h"
 #include "Similarity.h"
+#include "SimilarityMatrix.h"
 #include "WordDelimitedBy.h"
 #include "KMeans.h"
 #include "Cluster.h"
@@ -32,8 +33,14 @@ double Similarity::compute_pairwise_similarity(std::vector<double> A, std::vecto
     return dot / (sqrt(denom_a) * sqrt(denom_b));    
 }
 
-SymmetricSquareMatrix Similarity::generate_similarity_matrix(std::vector<Cluster> clusters) {
-    // SymmetricSquareMatrix ssm;
+void SimilarityMatrix::generate_matrix(Matrix dataSet) {
+    Similarity cosine_similarity;
+    for(int i = 0;i < dataSet.numRows();i++) {
+        for(int j = 0;j < dataSet.numRows();j++) {
+            double value = cosine_similarity.compute_pairwise_similarity(dataSet.getData(i).getFeatureVector(), dataSet.getData(j).getFeatureVector());
+            setElementOfMatrix(i, j, value);
+        } 
+    }
 }
 
 void KMeans::compute_centroids() {
@@ -130,6 +137,19 @@ std::ostream& operator<< (std::ostream& os, const std::vector<T>& v) {
     std::copy (v.begin(), v.end(), std::ostream_iterator<T>(os, ","));
   }
   return os;
+}
+
+std::ostream& operator<<(std::ostream& os,const SimilarityMatrix& sm) {
+    for(int i = 0;i < sm._data.size();i++) {
+        for(int j = 0;j < sm._data.size();j++) {
+            if(j < sm._data.size()-1)
+                os << sm._data[i][j] << ",";
+            else
+                os << sm._data[i][j];
+        }
+        os << std::endl;
+    }
+    return os;
 }
 
 std::ostream& operator<<(std::ostream& os, const Vector& vector) {
