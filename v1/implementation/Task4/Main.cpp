@@ -36,8 +36,8 @@ int main(int argc, char **argv) {
     int n = stoi(argv[1]);
     ifstream inputFile;
     ofstream outputFile;
-    //inputFile.open("../../../Lab-project-modified-datasets_20181114/AirQualityUCI/AirQualityUCI_mod.csv");
-    inputFile.open("../Task1/input.csv");
+    // inputFile.open("../../../Lab-project-modified-datasets_20181114/AirQualityUCI/AirQualityUCI_mod.csv");
+    inputFile.open("input.csv");
     outputFile.open("output.csv");
     string line;
     vector<string> input_matrix;
@@ -53,6 +53,8 @@ int main(int argc, char **argv) {
     int x = input_matrix.size();
     int y = get_col_size(input_matrix[0]);
     Matrix matrix;
+    matrix.setRows(x);
+    matrix.setCols(y);
     for(int i = 0;i < x;i++) {
         Record record(y, n, y - n);
         record.setRecord(input_matrix[i], n);
@@ -72,8 +74,8 @@ int main(int argc, char **argv) {
     cm.normalizeMatrix(CM);
     vector<int> ordering = var.ordering(variables);
 
-    outputFile<<cm;
-    outputFile.close();
+    fout<<cm;
+    fout.close();
     return 0; 
 }
 
