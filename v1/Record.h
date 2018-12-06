@@ -33,7 +33,7 @@ class Record {
             */
             void setRecord(std::string, int);
             void setFeatureVector(std::vector<double> &);
-            
+            void addToFeatureVector(double value) { _featureVector.push_back(value); }
             /*
                 get functions
             */

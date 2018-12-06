@@ -96,9 +96,11 @@ void KMeans::update_centroid(int id, int clusterSize, std::vector<double> entry)
 void KMeans::process() {
     compute_centroids();
     Similarity cosine_similarity;
+    int recordNum = 0;
     for(int i = 0;i < _dataSet.numRows();i++) {
         double dissimilarity = 1.0;
         int id = -1;
+        recordNum = -1;
         std::map<int, std::vector<double>>::iterator it;
         for(it = _centroids.begin(); it != _centroids.end(); it++) {
             double value = 1.0 - cosine_similarity.compute_pairwise_similarity(_dataSet.getData(i).getFeatureVector(), it -> second);
@@ -106,11 +108,13 @@ void KMeans::process() {
             if(dissimilarity > value) {
                 dissimilarity = value;
                 id = it -> first;
+                recordNum = i;
             }
         }
         for(int j = 0;j < _clusters.size();j++) {
             // std::cout << id << "   " << _clusters[j].get_id() << std::endl;
             if(id == _clusters[j].get_id()) {
+                _dataSet.getData(recordNum).addToFeatureVector((double)j);
                 Vector data(_dataSet.getData(i));
                 data.set_cluster_id(j);
                 _clusters[j].add_vector(data);
@@ -119,6 +123,7 @@ void KMeans::process() {
             }
         }
     }
+    // std::cout << _dataSet; 
     // for(int i = 0;i < maxIterations -1;i++) {
     //     for(int i = 0;i < _dataSet.numRows();i++) {
     //         int id = 
@@ -139,6 +144,14 @@ std::ostream& operator<< (std::ostream& os, const std::vector<T>& v) {
   return os;
 }
 
+// std::ostream& operator<<(std::ostream& os, Matrix& m) {
+//     for(int i = 0;i < m._numRows;i++) {
+//         os << m.getData(i).getNonFeatureVector() << m.getData(i).getFeatureVector();
+//         os << std::endl;
+//     }
+//     return os;
+// }
+
 std::ostream& operator<<(std::ostream& os,const SimilarityMatrix& sm) {
     for(int i = 0;i < sm._size;i++) {
         for(int j = 0;j < sm._size;j++) {
@@ -153,7 +166,8 @@ std::ostream& operator<<(std::ostream& os,const SimilarityMatrix& sm) {
 }
 
 std::ostream& operator<<(std::ostream& os, const Vector& vector) {
-    os << vector._nonFeatureVector << vector._featureVector << vector._clusterId;
+    std::vector<double> newVec(vector._featureVector.begin(), vector._featureVector.begin() + vector._featureVector.size() - 1);
+    os << vector._nonFeatureVector << newVec << vector._clusterId;
     return os;
 }
 
