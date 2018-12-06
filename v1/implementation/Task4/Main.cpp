@@ -50,6 +50,7 @@ int main(int argc, char **argv) {
         cout << "Unable to open file" << endl;
         exit(0);
     }
+    printf("blah blah blah 1init)=");
     int x = input_matrix.size();
     int y = get_col_size(input_matrix[0]);
     Matrix matrix;
@@ -60,16 +61,34 @@ int main(int argc, char **argv) {
         record.setRecord(input_matrix[i], n);
         matrix.addRecord(record);
     }
+    printf("blah blah blah init)=");
     //std::vector<std::vector<double>> sample = {{0,0,0,0},{1,1,1,1},{2,2,2,2}};
-    std::vector<Variable> variables(y-n);
+    std::vector<Variable> variables;
     for(int i = 0; i < (y-n); i++)
-        variables[i].setVariable(i,matrix);
+    {
+        Variable v(i);
+        v.set_numOfValues(x);
+        std::vector<double> values;
+        for(int j = 0; j < x; j++)
+        {
+            Record record = matrix.getData(j);
+            std::vector<double> temp = record.getFeatureVector();   
+            values.push_back(temp[i]);
+        }
+        v.set_values(values);
+        variables.push_back(v);
+    }
 
     Variance var;
     CovarianceMatrix cm;
-    Variable v1;
+    //Variable v1;
     var.computeVariance(variables);
+    printf("blah blah blah )=");
     var.normalizedVariables(variables);
+    printf("blah blah blah 2)=");
+    for(int i = 0; i < variables.size(); i++)
+        for(int j = 0; j < variables[i].get_numOfValues(); j++)
+            printf("%lf",variables[i].get_values()[j]);
     std::vector<std::vector<double>> CM = cm.generate_matrix(variables);
     cm.normalizeMatrix(CM);
     vector<int> ordering = var.ordering(variables);

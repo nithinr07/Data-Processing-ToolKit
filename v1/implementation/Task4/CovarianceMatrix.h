@@ -19,7 +19,7 @@ class CovarianceMatrix : public Matrix
     public: 
         CovarianceMatrix(){}
         
-        double computeCovariance(Variable, Variable);
+        //double computeCovariance(Variable, Variable);
         void computeVariance(std::vector<Variable>);
         std::vector<Variable> normalizedVariables(std::vector<Variable>);
         double normalize(double, double, double);

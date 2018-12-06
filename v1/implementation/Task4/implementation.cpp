@@ -21,20 +21,19 @@
 //    return is;
 //}
 
-void Variable::setVariable(int varIndex, Matrix& input)
-{
-    _varIndex = varIndex;
-    _numOfValues = input.numCols();
-    std::vector<double> values(_numOfValues);
-    for(int i = 0; i < _numOfValues; i++)
-    {
-        Record record = input.getData(i);
-        std::cout<<record.getFeatureVector()[i];
-        values[i] = record.getFeatureVector()[i];
-        values.push_back(record.getFeatureVector()[i]);
-    }
-    this->set_values(values);
-}
+//void Variable::setVariable(int varIndex, Matrix& input)
+//{
+//    _varIndex = varIndex;
+//    _numOfValues = input.numCols();
+//    std::vector<double> values(_numOfValues);
+//    for(int i = 0; i < _numOfValues; i++)
+//    {
+//        Record record = input.getData(i);
+//        values[i] = record.getFeatureVector()[i];
+//        values.push_back(record.getFeatureVector()[i]);
+//    }
+//    this->set_values(values);
+//}
 
 /* Variance.h implementation*/
 void Variance::computeVariance(std::vector<Variable> variables)
@@ -97,7 +96,7 @@ std::vector<Variable> Variance::normalizedVariables(std::vector<Variable> variab
 }
 
 /*CovarianceMatrix implementation*/
-double Variance::computeCovariance(Variable v1, Variable v2)
+double computeCovariance(Variable v1, Variable v2)
 {
     std::vector<double> val1 = v1.get_values();
     std::vector<double> val2 = v2.get_values();
@@ -114,16 +113,29 @@ double Variance::computeCovariance(Variable v1, Variable v2)
 
 std::vector<std::vector<double>> CovarianceMatrix::generate_matrix(std::vector<Variable> variables)
 {
-    std::vector<std::vector<double>> elements;
-    Variance var;
+    std::vector<std::vector<double>> elements; //(variables.size(),std::vector<double>( variables[0].get_numOfValues()));
     for(int i = 0; i < variables.size(); i++)
     {
-        for(int j = 0; j < variables.size(); j++)
+        std::vector<double> temp;
+        for(int j = 0; j < variables[i].get_numOfValues(); j++)
+        {
+            temp.push_back(0.0);
+        }
+        elements.push_back(temp);
+    }
+
+    for(int i = 0; i < variables.size(); i++)
+    {
+        for(int j = 0; j < variables[i].get_numOfValues(); j++)
         {
             if(i == j)
+            {
                 elements[i][j] = variables[i].get_variance();
+            }
             else
-                elements[i][j] = var.computeCovariance(variables[i], variables[j]);
+            {
+                elements[i][j] = computeCovariance(variables[i], variables[j]);
+            }
         }
     }
     return elements;
