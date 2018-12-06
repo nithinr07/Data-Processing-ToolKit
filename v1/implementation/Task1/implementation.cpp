@@ -114,7 +114,7 @@ void KMeans::process() {
         for(int j = 0;j < _clusters.size();j++) {
             // std::cout << id << "   " << _clusters[j].get_id() << std::endl;
             if(id == _clusters[j].get_id()) {
-                _dataSet.getData(recordNum).addToFeatureVector((double)j);
+                // _dataSet.getData(recordNum).addToFeatureVector((double)j);
                 Vector data(_dataSet.getData(i));
                 data.set_cluster_id(j);
                 _clusters[j].add_vector(data);

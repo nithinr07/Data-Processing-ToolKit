@@ -17,6 +17,8 @@ class Record {
                 _featureVector = std::vector<double>();
             }
 
+            ~Record() {}
+
             Record(int y, int n, int N):_numVariables(y), _numNonNumericalVariables(n), _numNumericalVariables(N) 
             {
                 _nonFeatureVector = std::vector<std::string>();

@@ -14,7 +14,7 @@ class Matrix{
   
  public:
   Matrix();  // constructor //
-  //~Matrix(){} // destructor //
+  ~Matrix(){} // destructor //
   Matrix(Matrix&) ; // copy constructor //
   Matrix(int, int, std::vector<Record>);
 
