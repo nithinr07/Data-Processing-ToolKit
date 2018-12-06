@@ -34,10 +34,12 @@ int main(int argc, char **argv) {
     ifstream inputFile;
     ofstream outputFile1;
     ofstream outputFile2;
-    // inputFile.open("../../../Lab-project-modified-datasets_20181114/AirQualityUCI/AirQualityUCI_mod.csv");
-    inputFile.open("input.csv");
+    ofstream outputFile3;
+    inputFile.open("../../../Lab-project-modified-datasets_20181114/AirQualityUCI/AirQualityUCI_mod.csv");
+    // inputFile.open("input.csv");
     outputFile1.open("kmeans.csv");
     outputFile2.open("similarity.csv");
+    outputFile3.open("records.csv");
     string ignore;
     getline(inputFile, ignore);
     string line;
@@ -61,14 +63,20 @@ int main(int argc, char **argv) {
         record.setRecord(input_matrix[i], n);
         matrix.addRecord(record);
     }
-    KMeans kmeans(k, matrix);
-    kmeans.process();
-    outputFile1 << kmeans << endl;
     vector<vector<double>> data(x);
     SimilarityMatrix sm(data, x);
     sm.generate_matrix(matrix);
     outputFile2 << sm;
+    KMeans kmeans(k, matrix);
+    kmeans.process();
+    outputFile1 << kmeans << endl;
+    // outputFile3 << kmeans.getDataSet();
+    // SimilarityMatrix sm(data, x);
+    // sm.generate_matrix(matrix);
+    // outputFile2 << sm;
     inputFile.close();
     outputFile1.close();
+    outputFile2.close();
+    outputFile3.close();
     return 0;
 }

@@ -16,6 +16,7 @@ class KMeans {
     public: KMeans(int, Matrix);
             void compute_centroids();
             void process();
+            Matrix& getDataSet() { return _dataSet; }
             void add_cluster(Cluster cluster) { _clusters.push_back(cluster); }
             void update_centroid(int, int, std::vector<double>);
             Cluster& get_cluster_by_id(int);

@@ -13,8 +13,8 @@ class Matrix{
     std::vector<Record> _data;
   
  public:
-  Matrix(); // constructor //
-  //~Matrix(){} // destructor //
+  Matrix();  // constructor //
+  ~Matrix(){} // destructor //
   Matrix(Matrix&) ; // copy constructor //
   Matrix(int, int, std::vector<Record>);
 

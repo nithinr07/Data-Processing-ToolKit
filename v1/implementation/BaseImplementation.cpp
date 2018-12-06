@@ -44,16 +44,28 @@ void Matrix::addRecord(Record &record) {
     _data.push_back(record);
 }
 
-std::ostream& operator<< (std::ostream& os, Matrix& m)
- {
-
-  int nr = m._numRows ;
-  int nc = m._numCols ;
-  os << nr << " " << nc << std::endl;
-  for (int i = 0; i < nr; i++) {
-      os << m._data[i]<< " " ;
+template <typename T>
+std::ostream& operator<< (std::ostream& os, const std::vector<T>& v) {
+  if ( !v.empty() ) {
+    std::copy (v.begin(), v.end(), std::ostream_iterator<T>(os, ","));
   }
   return os;
+}
+
+std::ostream& operator<< (std::ostream& os, Matrix& m)
+ {
+    for(int i = 0;i < m._numRows;i++) {
+        os << m.getData(i).getNonFeatureVector() << m.getData(i).getFeatureVector();
+        os << std::endl;
+    }
+    return os;
+//   int nr = m._numRows ;
+//   int nc = m._numCols ;
+//   os << nr << " " << nc << std::endl;
+//   for (int i = 0; i < nr; i++) {
+//       os << m._data[i]<< " " ;
+//   }
+//   return os;
 }
 
 
