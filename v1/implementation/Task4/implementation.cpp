@@ -14,26 +14,6 @@
 #include <vector>
 #include <algorithm>
 
-//template<char delimiter>
-//std::istream& operator>>(std::istream& is, WordDelimitedBy<delimiter>& output)
-//{
-//    std::getline(is, output, delimiter);
-//    return is;
-//}
-
-//void Variable::setVariable(int varIndex, Matrix& input)
-//{
-//    _varIndex = varIndex;
-//    _numOfValues = input.numCols();
-//    std::vector<double> values(_numOfValues);
-//    for(int i = 0; i < _numOfValues; i++)
-//    {
-//        Record record = input.getData(i);
-//        values[i] = record.getFeatureVector()[i];
-//        values.push_back(record.getFeatureVector()[i]);
-//    }
-//    this->set_values(values);
-//}
 
 /* Variance.h implementation*/
 void Variance::computeVariance(std::vector<Variable> variables)
@@ -106,8 +86,8 @@ double computeCovariance(Variable v1, Variable v2)
     
     double sum = 0;
     for(int i = 0; i < n; i++)
-        sum += (val1[i]-mean1)*(val2[i]-mean2); 
-    double cov = sum/n;   
+        sum += (v1.get_values()[i]-mean1)*(v2.get_values()[i]-mean2); 
+    double cov = sum/(n-1);   
     return cov;
 }
 
@@ -117,7 +97,7 @@ std::vector<std::vector<double>> CovarianceMatrix::generate_matrix(std::vector<V
     for(int i = 0; i < variables.size(); i++)
     {
         std::vector<double> temp;
-        for(int j = 0; j < variables[i].get_numOfValues(); j++)
+        for(int j = 0; j < variables.size(); j++)
         {
             temp.push_back(0.0);
         }
@@ -126,7 +106,7 @@ std::vector<std::vector<double>> CovarianceMatrix::generate_matrix(std::vector<V
 
     for(int i = 0; i < variables.size(); i++)
     {
-        for(int j = 0; j < variables[i].get_numOfValues(); j++)
+        for(int j = 0; j < variables.size(); j++)
         {
             if(i == j)
             {
@@ -145,26 +125,26 @@ void CovarianceMatrix::normalizeMatrix(std::vector<std::vector<double>> elements
 {
     double max = 0;
     Variance var;
-    for(int i = 0; i < _size; i++)
+    for(int i = 0; i < elements.size(); i++)
     {
-        for(int j = 0; j < _size; j++)
+        for(int j = 0; j < elements.size(); j++)
         {
             if(elements[i][j] > max)
                 max = elements[i][j];
         }
     }
     double min = 999999;
-    for(int i = 0; i < _size; i++)
+    for(int i = 0; i < elements.size(); i++)
     {
-        for(int j = 0; j < _size; j++)
+        for(int j = 0; j < elements.size(); j++)
         {
             if(elements[i][j] < min)
                 min = elements[i][j];
         }
     }
-    for(int i = 0; i < _size; i++)
+    for(int i = 0; i < elements.size(); i++)
     {
-        for(int j = 0; j < _size; j++)
+        for(int j = 0; j < elements.size(); j++)
             elements[i][j] = var.normalize(max, min, elements[i][j]);
     }    
 }
@@ -189,7 +169,7 @@ std::ostream& operator<< (std::ostream &os, CovarianceMatrix &cm)
 	{
 		for(auto j : i)
 		{
-			os << j <<" ";
+			os << j <<",";
 		}
 		os << std::endl;
 	}

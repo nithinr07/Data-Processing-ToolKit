@@ -36,12 +36,13 @@ int main(int argc, char **argv) {
     int n = stoi(argv[1]);
     ifstream inputFile;
     ofstream outputFile;
-    //inputFile.open("../../../Lab-project-modified-datasets_20181114/AirQualityUCI/AirQualityUCI_mod.csv");
-    inputFile.open("../Task1/input.csv");
+    inputFile.open("../../../Lab-project-modified-datasets_20181114/AirQualityUCI/AirQualityUCI_mod.csv");
+    //inputFile.open("../Task1/input.csv");
     outputFile.open("output.csv");
     string line;
     vector<string> input_matrix;
     if(inputFile.is_open()) {
+        getline(inputFile, line);
         while(getline(inputFile, line)) {
             input_matrix.push_back(line);
         }
@@ -50,7 +51,6 @@ int main(int argc, char **argv) {
         cout << "Unable to open file" << endl;
         exit(0);
     }
-    printf("blah blah blah 1init)=");
     int x = input_matrix.size();
     int y = get_col_size(input_matrix[0]);
     Matrix matrix;
@@ -61,7 +61,6 @@ int main(int argc, char **argv) {
         record.setRecord(input_matrix[i], n);
         matrix.addRecord(record);
     }
-    printf("blah blah blah init)=");
     //std::vector<std::vector<double>> sample = {{0,0,0,0},{1,1,1,1},{2,2,2,2}};
     std::vector<Variable> variables;
     for(int i = 0; i < (y-n); i++)
@@ -83,14 +82,24 @@ int main(int argc, char **argv) {
     CovarianceMatrix cm;
     //Variable v1;
     var.computeVariance(variables);
-    printf("blah blah blah )=");
     var.normalizedVariables(variables);
-    printf("blah blah blah 2)=");
-    for(int i = 0; i < variables.size(); i++)
-        for(int j = 0; j < variables[i].get_numOfValues(); j++)
-            printf("%lf",variables[i].get_values()[j]);
+    //for(int i = 0; i < variables.size(); i++){
+    //    for(int j = 0; j < variables[i].get_numOfValues(); j++){
+    //        printf("%lf ",variables[i].get_values()[j]);}
+    //printf("\n");
+    //}
+
     std::vector<std::vector<double>> CM = cm.generate_matrix(variables);
+    for(int i = 0; i < CM.size(); i++)
+    {
+        for(int j = 0; j < CM.size(); j++)
+        {
+            printf("%lf ",CM[i][j]);
+        }
+        printf("\n");
+    }
     cm.normalizeMatrix(CM);
+
     vector<int> ordering = var.ordering(variables);
 
     outputFile<<cm;
