@@ -21,15 +21,19 @@
 //    return is;
 //}
 
-void Variable::setVariable(int varIndex, Matrix input)
+void Variable::setVariable(int varIndex, Matrix& input)
 {
     _varIndex = varIndex;
-    _numOfValues = input.numRows();
+    _numOfValues = input.numCols();
+    std::vector<double> values(_numOfValues);
     for(int i = 0; i < _numOfValues; i++)
     {
         Record record = input.getData(i);
-        _values[i] = record.getFeatureVector()[i];
+        std::cout<<record.getFeatureVector()[i];
+        values[i] = record.getFeatureVector()[i];
+        values.push_back(record.getFeatureVector()[i]);
     }
+    this->set_values(values);
 }
 
 /* Variance.h implementation*/

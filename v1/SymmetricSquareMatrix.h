@@ -5,7 +5,7 @@
 
 class SymmetricSquareMatrix {
 
-    protected: std::vector<std::vector<double>> _data;
+    protected: std::vector<std::vector<double> > _data;
              int _numRows;
              int _numColums;   
 

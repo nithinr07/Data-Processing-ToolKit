@@ -60,6 +60,7 @@ for(int i=0;i<v.size();i++)out<<v[i]<<' ';return out;}
 vector<int> ReorderingSSM::CuthillMckee(){
     vector<double> degrees = degreeGenerator();
     ::globalDegree = degrees;
+    cout << degrees << endl;
     sparsification();
     queue<int> Q;
     vector<int> R;
